@@ -1,18 +1,61 @@
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
+  env: {
+    browser: true,
+    es2021: true,
+  },
   extends: [
     'eslint:recommended',
+    'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
+    'plugin:prettier/recommended',
+    'plugin:react/jsx-runtime',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  overrides: [],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  settings: {
+    react: {
+      version: 'detect', // Tells eslint-plugin-react to automatically detect the version of React to use
+    },
+  },
+  plugins: ['@typescript-eslint', 'react', 'import'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
   rules: {
-    'react-refresh/only-export-components': [
+    'prettier/prettier': [
       'warn',
-      { allowConstantExport: true },
+      {
+        endOfLine: 'auto',
+      },
+    ],
+    curly: 'error',
+    'no-console': 'warn',
+    'import/prefer-default-export': 'off',
+    'no-unused-expressions': 'error',
+    'react/jsx-no-useless-fragment': 'error',
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'type',
+        ],
+        pathGroups: [
+          {
+            pattern: '@/**/**',
+            group: 'parent',
+            position: 'before',
+          },
+        ],
+        alphabetize: { order: 'asc' },
+      },
     ],
   },
-}
+};
