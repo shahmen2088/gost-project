@@ -1,12 +1,17 @@
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { User } from '../../api/usersApi';
 
 type Props = {
   users: User[];
 };
 
-export const UserForm = ({ users }: Props) => {
+export const ApplicationsForm = ({ users }: Props) => {
+  const { register, handleSubmit } = useForm();
+  const onSubmit: SubmitHandler<FieldValues> = (e) => {
+    e.preventDefault();
+  };
   return (
-    <form id="user-form" method="post">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="user">
         Выберите специалиста:
         <select name="user" id="user" required>
@@ -22,7 +27,14 @@ export const UserForm = ({ users }: Props) => {
       <p>
         <label>
           Введите название документа: <br />
-          <input type="text" name="name" id="name" required />
+          <input
+            type="text"
+            placeholder="document name"
+            {...register('docName', {
+              required: true,
+              minLength: 3,
+            })}
+          />
         </label>
       </p>
       <input type="submit" value="Отправить" />
