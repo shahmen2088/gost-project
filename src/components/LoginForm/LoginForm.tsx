@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../shared/hooks/hook';
 import { setUserLogin } from '../../shared/reducers/slices/userSlice';
+import { authenticateCredentials } from '../../shared/utils/userVerificationUtils';
 import st from './LoginFrom.module.css';
 
 export const LoginForm = () => {
@@ -14,14 +15,17 @@ export const LoginForm = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const onSubmit: SubmitHandler<FieldValues> = (e) => {
-    e.preventDefault();
-    dispatch(
-      setUserLogin({
-        email,
-        password,
-      }),
-    );
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
+  const onSubmit: SubmitHandler<FieldValues> = () => {
+    authenticateCredentials(email, password)?.then((data) => {
+      if (data) {
+        dispatch(setUserLogin({ ...data }));
+        navigate('/main');
+      } else {
+        setErrorMessage('Логин или пароль введены неверно');
+      }
+    });
   };
 
   return (
@@ -34,7 +38,7 @@ export const LoginForm = () => {
             type="email"
             {...register('email', {
               required: true,
-              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i,
+              // pattern: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i,
               onChange: (e) => setEmail(e.target.value),
             })}
             placeholder="Your email"
@@ -51,8 +55,8 @@ export const LoginForm = () => {
             type="password"
             {...register('password', {
               required: true,
-              pattern:
-                /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/,
+              // pattern:
+              //   /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/,
               onChange: (e) => setPassword(e.target.value),
             })}
             placeholder="Your password"
@@ -70,6 +74,7 @@ export const LoginForm = () => {
           <Link to={'/signUp'} className={st.link}>
             Зарегистрироваться
           </Link>
+          <p className={st.error}>{errorMessage}</p>
         </div>
       </form>
     </div>

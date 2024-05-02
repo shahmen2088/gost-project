@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../shared/hooks/hook';
 import { setSignUp } from '../../shared/reducers/slices/userSlice';
+import { authenticateCredentials } from '../../shared/utils/userVerificationUtils';
 import st from './SignUpForm.module.css';
 
 export const SignUpForm = () => {
@@ -14,18 +15,24 @@ export const SignUpForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const onSubmit: SubmitHandler<FieldValues> = (e) => {
-    e.preventDefault();
-    dispatch(
-      setSignUp({
-        name,
-        email,
-        password,
-        documents: [],
-      }),
-    );
+  const onSubmit: SubmitHandler<FieldValues> = () => {
+    authenticateCredentials(email, password)?.then((data) => {
+      if (data) {
+        setErrorMessage('Аккаунт с такой почтой уже существует!');
+      } else {
+        dispatch(
+          setSignUp({
+            ...data,
+          }),
+          navigate('/login'),
+        );
+      }
+    });
   };
+
   return (
     <div className={st.form_wrapper}>
       <div className={st.title}>Регистрация</div>
@@ -36,7 +43,6 @@ export const SignUpForm = () => {
             type="text"
             {...register('name', {
               required: true,
-              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i,
               onChange: (e) => setName(e.target.value),
             })}
             placeholder="Your name"
@@ -51,7 +57,7 @@ export const SignUpForm = () => {
             type="email"
             {...register('email', {
               required: true,
-              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i,
+              // pattern: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i,
               onChange: (e) => setEmail(e.target.value),
             })}
             placeholder="Your email"
@@ -68,8 +74,8 @@ export const SignUpForm = () => {
             type="password"
             {...register('password', {
               required: true,
-              pattern:
-                /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/,
+              // pattern:
+              //   /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/,
               onChange: (e) => setPassword(e.target.value),
             })}
             placeholder="Your password"
@@ -80,17 +86,16 @@ export const SignUpForm = () => {
             <small>password is required</small>
           )}
         </div>
-        <div className={st.button_panel}>
-          <input
-            type="submit"
-            className={st.button}
-            value={'Создать аккаунт'}
-          ></input>
-        </div>
+        <input
+          type="submit"
+          className={st.button}
+          value={'Создать аккаунт'}
+        ></input>
         <div className={st.form_footer}>
           <Link to={'/login'} className={st.link}>
             У меня уже есть аккаунт
           </Link>
+          <p className={st.error}>{errorMessage}</p>
         </div>
       </form>
     </div>

@@ -7,7 +7,7 @@ type UserBaseState = {
 
 interface UserState extends UserBaseState {
   name: string;
-  documents: [];
+  applicationHistory: [];
 }
 
 const userSlice = createSlice({
@@ -16,28 +16,30 @@ const userSlice = createSlice({
     name: '',
     email: '',
     password: '',
-    documents: [],
+    applicationHistory: [],
   },
   reducers: {
-    setUserLogin: (state, { payload }: PayloadAction<UserBaseState>) => {
-      // state.name = payload.name;
+    setUserLogin: (state, { payload }: PayloadAction<UserState>) => {
+      state.name = payload.name;
       state.email = payload.email;
       state.password = payload.password;
-      // state.documents = payload.documents;
+      state.applicationHistory = payload.applicationHistory;
     },
     setSignUp: (state, { payload }: PayloadAction<UserState>) => {
       state.name = payload.name;
       state.email = payload.email;
       state.password = payload.password;
-      state.documents = payload.documents;
+      state.applicationHistory = payload.applicationHistory;
     },
     setSignOut: (state) => {
       state.name = '';
       state.email = '';
       state.password = '';
-      state.documents = [];
+      state.applicationHistory = [];
     },
   },
 });
 
 export const { setUserLogin, setSignUp, setSignOut } = userSlice.actions;
+
+export default userSlice.reducer;
