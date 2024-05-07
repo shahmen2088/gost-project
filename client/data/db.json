@@ -1,0 +1,66 @@
+{
+  "constructors": [
+    {
+      "name": "Иванов Иван Иванович",
+      "email": "ivanov@mail.ru",
+      "password": "a234234sd123",
+      "applications": [
+        "ГОСТ 123",
+        "ГОСТ 125/3",
+        "ГОСТ 123 П"
+      ],
+      "id": 1
+    },
+    {
+      "name": "Петров Павел Петрович",
+      "email": "petrov@mail.ru",
+      "password": "asd3424123",
+      "applications": [
+        "ГОСТ 128",
+        "ГОСТ 125/5",
+        "ГОСТ 123 Р"
+      ],
+      "id": 2
+    },
+    {
+      "name": "Сидоров Сергей Слаутович",
+      "email": "sidorov@mail.ru",
+      "password": "123124",
+      "applications": [
+        "ГОСТ РВ 0009",
+        "ГОСТ РВ 0010",
+        "ГОСТ 123/5 П"
+      ],
+      "id": 3
+    },
+    {
+      "name": "Шохрух Эркинович Буронов",
+      "email": "123@mail.ru",
+      "password": "asd123",
+      "applicationHistory": [],
+      "id": 4
+    },
+    {
+      "name": "Шохрух Эркинович Буронов",
+      "email": "123@mail.ru",
+      "password": "asd123",
+      "applicationHistory": [],
+      "id": 5
+    },
+    {
+      "name": "Шохрух Эркинович Буронов",
+      "email": "dima@mail.ru",
+      "password": "shahmen",
+      "applicationHistory": [],
+      "id": 6
+    }
+  ],
+  "online": [
+    {
+      "email": "123@mail.ru",
+      "password": "asd123",
+      "applicationHistory": [],
+      "id": 2
+    }
+  ]
+}
